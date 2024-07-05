@@ -25,6 +25,7 @@
         "webpack-cli": "^4.7.2"
     },
     "dependencies": {
+        "gsap": "^3.12.5",
         "lodash": "^4.17.21"
     }
 }
