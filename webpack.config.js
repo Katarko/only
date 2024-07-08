@@ -5,7 +5,6 @@ module.exports = {
     mode: "development",
     entry: {
         index: "./src/index.ts",
-        another: "./src/event-card.ts",
     },
     devtool: "inline-source-map",
     plugins: [
