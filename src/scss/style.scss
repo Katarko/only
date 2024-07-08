@@ -98,9 +98,6 @@ body {
             margin-left: auto;
         }
     }
-    &__pagination {
-        display: none;
-    }
 }
 .event-item {
     &__title {
@@ -119,9 +116,9 @@ body {
     }
 }
 .period-slider {
-    padding: 0 80px;
     &__title-container {
         position: relative;
+        padding: 0 15px;
     }
     &__title {
         font-size: 200px;
@@ -144,7 +141,7 @@ body {
             top: 50%;
             background: #e2e5ec;
             position: absolute;
-            background: red;
+            z-index: -1;
         }
         &_max {
             color: #ef5da8;
@@ -154,6 +151,8 @@ body {
         font-size: 14px;
         font-weight: 400;
         line-height: calc(18 / 14);
+        margin: 0 auto;
+        max-width: calc(1440px - 160px);
     }
     &__pagination-circle {
         border-radius: 50%;
@@ -195,8 +194,8 @@ body {
                 .swiper-pagination-bullet__index {
                     background: #f4f5f9;
                     border: 1px solid #303e5880;
-                    width: 55px;
-                    height: 55px;
+                    width: 56px;
+                    height: 56px;
                     color: inherit;
                 }
             }
@@ -214,8 +213,8 @@ body {
                 .swiper-pagination-bullet__index {
                     background: #f4f5f9;
                     border: 1px solid #303e5880;
-                    width: 55px;
-                    height: 55px;
+                    width: 56px;
+                    height: 56px;
                     color: inherit;
                 }
             }
@@ -225,7 +224,8 @@ body {
         display: flex;
         align-items: center;
         gap: 8px;
-        margin-top: 20px;
+        margin: 20px auto 0;
+        max-width: calc(1440px - 160px);
     }
     &__btn {
         background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTQiIHZpZXdCb3g9IjAgMCAxMCAxNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTguNDk5ODggMC43NTAwMDFMMi4yNDk4OCA3TDguNDk5ODggMTMuMjUiIHN0cm9rZT0iIzQyNTY3QSIgc3Ryb2tlLXdpZHRoPSIyIi8+Cjwvc3ZnPgo=");

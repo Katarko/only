@@ -9,14 +9,14 @@ import "swiper/scss/effect-fade";
 import { HtmlTagObject } from "html-webpack-plugin";
 import { gsap } from "gsap";
 
-let events = [
-    { id: 0, parentId: 1, title: "2000", description: "" },
-    { id: 1, parentId: 1, title: "2000", description: "" },
-    { id: 2, parentId: 1, title: "2000", description: "" },
-    { id: 3, parentId: 1, title: "2000", description: "" },
-    { id: 4, parentId: 1, title: "2000", description: "" },
-    { id: 5, parentId: 1, title: "2000", description: "" },
-];
+// let events = [
+//     { id: 0, parentId: 1, title: "2000", description: "" },
+//     { id: 1, parentId: 1, title: "2000", description: "" },
+//     { id: 2, parentId: 1, title: "2000", description: "" },
+//     { id: 3, parentId: 1, title: "2000", description: "" },
+//     { id: 4, parentId: 1, title: "2000", description: "" },
+//     { id: 5, parentId: 1, title: "2000", description: "" },
+// ];
 
 function component() {
     return;
@@ -24,20 +24,35 @@ function component() {
 // events.forEach(function (element) {
 //     let event = new Event(element.id, element.parentId, element.title, element.description);
 // });
+
+// class Event {
+//     id: number;
+//     parentId: number;
+//     title: string;
+//     description: string;
+//     constructor(eventId: number, eventParentId: number, eventTitle: string, eventDescription: string) {
+//         this.id = eventId;
+//         this.parentId = eventParentId;
+//         this.title = eventTitle;
+//         this.description = eventDescription;
+//     }
+// }
 const titles: string[] = ["Заголовок", "Кино", "Литература", "Театр", "Заголовок", "Наука"];
 document.querySelector<HTMLElement>(".period-slider__pagination-circle").style.transform = "rotate(0deg)";
-class Event {
-    id: number;
-    parentId: number;
-    title: string;
-    description: string;
-    constructor(eventId: number, eventParentId: number, eventTitle: string, eventDescription: string) {
-        this.id = eventId;
-        this.parentId = eventParentId;
-        this.title = eventTitle;
-        this.description = eventDescription;
-    }
-}
+gsap.registerEffect({
+    name: "fadeIn",
+    effect: (targets: HtmlTagObject, config: any) => {
+        return gsap.to(targets, { duration: config.duration, opacity: 1 });
+    },
+    defaults: { duration: 0.4 }, //defaults get applied to any "config" object passed to the effect
+});
+gsap.registerEffect({
+    name: "fadeOut",
+    effect: (targets: HtmlTagObject, config: any) => {
+        return gsap.to(targets, { duration: config.duration, opacity: 0 });
+    },
+    defaults: { duration: 0.1 }, //defaults get applied to any "config" object passed to the effect
+});
 let mainSwiper = new Swiper(".period-slider__swiper", {
     modules: [Navigation, Pagination, EffectFade, Controller],
     slidesPerView: 1,
@@ -70,8 +85,11 @@ let pagingSwiper = new Swiper(".period-slider__swiper", {
         clickable: true,
     },
     on: {
-        afterInit: function () {
+        init: function () {
             alignBullets();
+        },
+        afterInit: function () {
+            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title");
         },
         slideChange: function () {
             rotateBullets();
@@ -105,7 +123,7 @@ function alignBullets() {
     let bullets = document.querySelectorAll<HTMLElement>(".swiper-pagination-bullet");
     let container = document.querySelector<HTMLElement>(".period-slider__pagination-circle");
     let diameter = container.offsetWidth,
-        angle = -45,
+        angle = -1.0471975512,
         radius = diameter / 2,
         step = (2 * Math.PI) / bullets.length,
         bulletWidth = bullets[0].offsetWidth;
@@ -142,17 +160,25 @@ function rotateBullets() {
         bullets[i].style.transform = "rotate(" + -newAngle + "deg)";
     }
 }
-gsap.registerEffect({
-    name: "fadeIn",
-    effect: (targets: HtmlTagObject, config: any) => {
-        return gsap.to(targets, { duration: config.duration, opacity: 1 });
-    },
-    defaults: { duration: 0.4 }, //defaults get applied to any "config" object passed to the effect
-});
-gsap.registerEffect({
-    name: "fadeOut",
-    effect: (targets: HtmlTagObject, config: any) => {
-        return gsap.to(targets, { duration: config.duration, opacity: 0 });
-    },
-    defaults: { duration: 0.1 }, //defaults get applied to any "config" object passed to the effect
-});
+function animateCounter() {
+    gsap.to(document.querySelector(".period-slider__title_min"), {
+        textContent: 2000,
+        duration: 1,
+        snap: { textContent: 1 },
+    });
+    gsap.to(document.querySelector(".period-slider__title_max"), {
+        textContent: 2000,
+        duration: 1,
+        snap: { textContent: 1 },
+    });
+    // gsap.utils.toArray(".period-slider__title_min").forEach((box) => {
+    //     var spin = box.getAttribute("data-spin");
+    //     let tween = gsap.from(box, {
+    //         textContent: spin,
+    //         duration: 4,
+    //         ease: "power1.in",
+    //         snap: { textContent: 1 },
+    //     });
+    // });
+}
+animateCounter();
