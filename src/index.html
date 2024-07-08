@@ -1,3 +1,18 @@
+<!-- <div class="">
+        <h5 class="">1987&nbsp;<span>1991</span></h5>
+    </div> -->
+<!-- <div class="">
+            <h5 class="">1992&nbsp;<span>1997</span></h5>
+        </div> -->
+<!-- <div class="">
+            <h5 class="">1999&nbsp;<span>2004</span></h5>
+        </div> -->
+<!-- <div class="">
+            <h5 class="">2005&nbsp;<span>2014</span></h5>
+        </div> -->
+<!-- <div class="">
+            <h5 class="">2015&nbsp;<span>2022</span></h5>
+        </div> -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,24 +21,8 @@
         <title>Document</title>
         <section class="section">
             <h2 class="section__title">Исторические<br />даты</h2>
-            <div class="time-period-slider">
-                <h5 class="time-period-item" data-min="1980" data-max="1986"><span class="time-period-item__val time-period-item__val_min" data-spin="500">2000</span>&nbsp; <span data-akhi="1000" class="time-period-item__val time-period-item__val_max">2000</span></h5>
-                <!-- <div class="time-period-item">
-                        <h5 class="time-period-item__title">1987&nbsp;<span>1991</span></h5>
-                    </div> -->
-                <!-- <div class="time-period-item">
-                            <h5 class="time-period-item__title">1992&nbsp;<span>1997</span></h5>
-                        </div> -->
-                <!-- <div class="time-period-item">
-                            <h5 class="time-period-item__title">1999&nbsp;<span>2004</span></h5>
-                        </div> -->
-                <!-- <div class="time-period-item">
-                            <h5 class="time-period-item__title">2005&nbsp;<span>2014</span></h5>
-                        </div> -->
-                <!-- <div class="time-period-item">
-                            <h5 class="time-period-item__title">2015&nbsp;<span>2022</span></h5>
-                        </div> -->
-                <div class="swiper time-period-slider__swiper">
+            <div class="period-slider">
+                <div class="swiper period-slider__swiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide"></div>
                         <div class="swiper-slide"></div>
@@ -32,12 +31,15 @@
                         <div class="swiper-slide"></div>
                         <div class="swiper-slide"></div>
                     </div>
-                    <div class="time-period-slider__pagination"></div>
-                    <div class="time-period-slider__pagination-circle"></div>
                 </div>
-                <div class="time-period-slider__btns">
-                    <div class="time-period-slider__btn time-period-slider__btn_prev"></div>
-                    <div class="time-period-slider__btn time-period-slider__btn_next"></div>
+                <div class="period-slider__title-container">
+                    <h5 class="period-slider__title" data-min="1980" data-max="1986"><span class="period-slider__title_min" data-spin="500">2000</span>&nbsp; <span data-akhi="1000" class="period-slider__title_max">2000</span></h5>
+                    <div class="period-slider__pagination-circle"></div>
+                </div>
+                <div class="period-slider__pagination"></div>
+                <div class="period-slider__btns">
+                    <div class="period-slider__btn period-slider__btn_prev"></div>
+                    <div class="period-slider__btn period-slider__btn_next"></div>
                 </div>
             </div>
             <div class="event-slider">
