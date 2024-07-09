@@ -170,6 +170,9 @@ let mainSwiper = new Swiper(".period-slider__swiper", {
     pagination: {
         el: ".period-slider__pagination",
         type: "fraction",
+        renderFraction: function (currentClass, totalClass) {
+            return '<span class="' + currentClass.padStart(5, "0") + '"></span>' + "/" + '<span class="' + totalClass.padStart(2, "0") + '"></span>';
+        },
     },
     navigation: {
         prevEl: ".period-slider__btn_prev",
