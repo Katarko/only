@@ -67,6 +67,9 @@ body {
     margin: clamp(1.25rem, 0.607rem + 3.21vw, 3.5rem) 0 0;
     padding: 0 clamp(1.25rem, 0.179rem + 5.36vw, 5rem);
     position: relative;
+    &__swiper {
+        min-height: 104px;
+    }
     &__btns {
         position: absolute;
         right: -40px;

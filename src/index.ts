@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import "./scss/style.scss";
 import Swiper from "swiper";
-import { Navigation, Pagination, Controller } from "swiper/modules";
+import { Navigation, Pagination, Controller, Manipulation } from "swiper/modules";
 import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
@@ -9,21 +9,159 @@ import "swiper/scss/effect-fade";
 import { HtmlTagObject } from "html-webpack-plugin";
 import { gsap } from "gsap";
 
-const titles: string[] = ["Заголовок", "Кино", "Литература", "Театр", "Заголовок", "Наука"];
+interface period {
+    title: string;
+    from: string;
+    to: string;
+    events: Array<event>;
+}
+interface event {
+    year: string;
+    event: string;
+}
+const periods: Array<period> = [
+    {
+        title: "Заголовок",
+        from: "1980",
+        to: "1986",
+        events: [
+            {
+                year: "1982",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1984",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1985",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+    {
+        title: "Кино",
+        from: "1987",
+        to: "1991",
+        events: [
+            {
+                year: "1988",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1989",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1990",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+    {
+        title: "Литература",
+        from: "1992",
+        to: "1997",
+        events: [
+            {
+                year: "1993",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1994",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "1995",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+    {
+        title: "Театр",
+        from: "1999",
+        to: "2004",
+        events: [
+            {
+                year: "2000",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2001",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2003",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+    {
+        title: "Заголовок",
+        from: "2005",
+        to: "2014",
+        events: [
+            {
+                year: "2006",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2010",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2011",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+    {
+        title: "Наука",
+        from: "2015",
+        to: "2022",
+        events: [
+            {
+                year: "2015",
+                event: "13 сентября — частное солнечное затмение, видимое в Южной Африке и части Антарктиды",
+            },
+            {
+                year: "2016",
+                event: "Телескоп «Хаббл» обнаружил самую удалённую из всех обнаруженных галактик, получившую обозначение GN-z11",
+            },
+            {
+                year: "2017",
+                event: "Компания Tesla официально представила первый в мире электрический грузовик Tesla Semi",
+            },
+            {
+                year: "2018",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2019",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+            {
+                year: "2021",
+                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            },
+        ],
+    },
+];
+
 document.querySelector<HTMLElement>(".period-slider__pagination-circle").style.transform = "rotate(0deg)";
 gsap.registerEffect({
     name: "fadeIn",
     effect: (targets: HtmlTagObject, config: any) => {
         return gsap.to(targets, { duration: config.duration, opacity: 1 });
     },
-    defaults: { duration: 0.4 },
+    defaults: { duration: 1 },
 });
 gsap.registerEffect({
     name: "fadeOut",
     effect: (targets: HtmlTagObject, config: any) => {
         return gsap.to(targets, { duration: config.duration, opacity: 0 });
     },
-    defaults: { duration: 0.1 },
+    defaults: { duration: 1 },
 });
 let mainSwiper = new Swiper(".period-slider__swiper", {
     modules: [Navigation, Pagination, Controller],
@@ -38,12 +176,22 @@ let mainSwiper = new Swiper(".period-slider__swiper", {
         nextEl: ".period-slider__btn_next",
     },
     on: {
-        slideChange: function () {},
-        slideChangeTransitionStart: function () {
-            gsap.effects.fadeOut(".swiper-pagination-bullet__title");
+        beforeInit: function () {
+            setSlides();
+        },
+        slideChange: function () {
+            setEvents();
+            console.log("slideChange1");
+        },
+        beforeTransitionStart: function () {
+            gsap.effects.fadeOut(".swiper-pagination-bullet__title", { duration: 0 });
+            gsap.effects.fadeOut(".event-slider", { duration: 0.5 });
+            console.log("beforeTransitionStart1");
         },
         slideChangeTransitionEnd: function () {
-            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title");
+            gsap.effects.fadeIn(".event-slider", { duration: 2 });
+            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
+            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
             animateCounter();
         },
     },
@@ -59,16 +207,21 @@ let pagingSwiper = new Swiper(".period-slider__swiper", {
             alignBullets();
         },
         afterInit: function () {
-            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title");
+            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0 });
         },
         slideChange: function () {
             rotateBullets();
         },
-        slideChangeTransitionStart: function () {
-            gsap.effects.fadeOut(".swiper-pagination-bullet__title");
+        beforeTransitionStart: function () {
+            gsap.effects.fadeOut(".swiper-pagination-bullet__title", { duration: 0 });
+        },
+        beforeSlideChangeStart: function () {
+            gsap.effects.fadeOut(".event-slider", { duration: 0.5 });
+            console.log("beforeSlideChangeStart2");
         },
         slideChangeTransitionEnd: function () {
-            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title");
+            gsap.effects.fadeIn(".event-slider", { duration: 2 });
+            gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
         },
     },
 });
@@ -77,7 +230,7 @@ mainSwiper.controller.control = pagingSwiper;
 pagingSwiper.controller.control = mainSwiper;
 
 let eventSwiper = new Swiper(".event-slider__swiper", {
-    modules: [Navigation],
+    modules: [Navigation, Manipulation],
     direction: "horizontal",
     slidesPerView: 3,
     spaceBetween: 80,
@@ -107,7 +260,7 @@ function alignBullets() {
             let bulletIndex = document.createElement("div");
             bulletTitle.className = "swiper-pagination-bullet__title";
             bulletIndex.className = "swiper-pagination-bullet__index";
-            bulletTitle.textContent = titles[i];
+            bulletTitle.textContent = periods[i].title;
             bulletIndex.textContent = (i + 1).toString();
             bullets[i].appendChild(bulletTitle);
             bullets[i].appendChild(bulletIndex);
@@ -147,3 +300,30 @@ function animateCounter() {
         snap: { textContent: 1 },
     });
 }
+function setSlides() {
+    for (let i = 0; i < periods.length; i++) {
+        let slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.setAttribute("data-from", periods[i].from);
+        slide.setAttribute("data-to", periods[i].to);
+        document.querySelector(".period-slider .swiper-wrapper").appendChild(slide);
+    }
+}
+function setEvents() {
+    eventSwiper.removeAllSlides();
+    let events = periods[mainSwiper.activeIndex].events;
+    for (let i = 0; i < events.length; i++) {
+        let slide = document.createElement("div");
+        let title = document.createElement("div");
+        let desc = document.createElement("div");
+        slide.className = "swiper-slide event-item";
+        title.className = "event-item__title";
+        desc.className = "event-item__desc";
+        title.textContent = events[i].year;
+        desc.textContent = events[i].event;
+        slide.appendChild(title);
+        slide.appendChild(desc);
+        eventSwiper.appendSlide(slide);
+    }
+}
+setEvents();
