@@ -5,7 +5,6 @@ import { Navigation, Pagination, Controller, Manipulation } from "swiper/modules
 import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
-import "swiper/scss/effect-fade";
 import { HtmlTagObject } from "html-webpack-plugin";
 import { gsap } from "gsap";
 
@@ -170,9 +169,8 @@ let mainSwiper = new Swiper(".period-slider__swiper", {
     pagination: {
         el: ".period-slider__pagination",
         type: "fraction",
-        renderFraction: function (currentClass, totalClass) {
-            return '<span class="' + currentClass.padStart(5, "0") + '"></span>' + "/" + '<span class="' + totalClass.padStart(2, "0") + '"></span>';
-        },
+        formatFractionCurrent: addPadStart,
+        formatFractionTotal: addPadStart,
     },
     navigation: {
         prevEl: ".period-slider__btn_prev",
@@ -244,6 +242,29 @@ let eventSwiper = new Swiper(".event-slider__swiper", {
         prevEl: ".event-slider__btn_prev",
         nextEl: ".event-slider__btn_next",
     },
+    breakpoints: {
+        320: {
+            slidesPerView: "auto",
+            spaceBetween: 25,
+            loop: true,
+        },
+        576: {
+            slidesPerView: 2,
+            spaceBetween: 25,
+        },
+        768: {
+            slidesPerView: 3,
+            spaceBetween: 40,
+        },
+        992: {
+            slidesPerView: 3,
+            spaceBetween: 60,
+        },
+        1200: {
+            slidesPerView: 3,
+            spaceBetween: 80,
+        },
+    },
 });
 function alignBullets() {
     if (window.innerWidth > 991) {
@@ -314,6 +335,7 @@ function setSlides() {
 }
 function setEvents() {
     eventSwiper.removeAllSlides();
+    document.querySelector(".event-slider__title").textContent = periods[mainSwiper.activeIndex].title;
     let events = periods[mainSwiper.activeIndex].events;
     for (let i = 0; i < events.length; i++) {
         let slide = document.createElement("div");
@@ -330,3 +352,6 @@ function setEvents() {
     }
 }
 setEvents();
+function addPadStart(number: number) {
+    return number.toString().padStart(2, "0");
+}

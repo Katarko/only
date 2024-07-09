@@ -1,6 +1,12 @@
-# only
+# Only
 
-To-do: title appear after slide change
-counters
-bottom sliders
-adapt
+## Запуск проекта
+
+Выполните следующие команды:
+
+```
+npm i
+npm run build
+```
+
+Если сборка проекта прошла успешно, откройте файл dist/index.html в браузере.
