@@ -1,7 +1,6 @@
-import * as _ from "lodash";
 import "./scss/style.scss";
 import Swiper from "swiper";
-import { Navigation, Pagination, Controller, Manipulation } from "swiper/modules";
+import { Navigation, Pagination, Controller, Manipulation, FreeMode } from "swiper/modules";
 import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
@@ -20,21 +19,25 @@ interface event {
 }
 const periods: Array<period> = [
     {
-        title: "Заголовок",
+        title: "Технологии",
         from: "1980",
         to: "1986",
         events: [
             {
-                year: "1982",
-                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+                year: "1980",
+                event: "Sinclair Research выпускает домашний компьютер ZX80",
+            },
+            {
+                year: "1983",
+                event: "Компания Coleco выпустила компьютер Coleco Adam.",
             },
             {
                 year: "1984",
-                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+                event: "Apple представила миру Macintosh.",
             },
             {
                 year: "1985",
-                event: "Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+                event: "Commodore выпустила Amiga 1000, первый домашний мультимедийный компьютер.",
             },
         ],
     },
@@ -96,7 +99,7 @@ const periods: Array<period> = [
         ],
     },
     {
-        title: "Заголовок",
+        title: "Спорт",
         from: "2005",
         to: "2014",
         events: [
@@ -148,6 +151,9 @@ const periods: Array<period> = [
 ];
 
 document.querySelector<HTMLElement>(".period-slider__pagination-circle").style.transform = "rotate(0deg)";
+gsap.defaults({
+    overwrite: true,
+});
 gsap.registerEffect({
     name: "fadeIn",
     effect: (targets: HtmlTagObject, config: any) => {
@@ -161,6 +167,13 @@ gsap.registerEffect({
         return gsap.to(targets, { duration: config.duration, opacity: 0 });
     },
     defaults: { duration: 1 },
+});
+gsap.registerEffect({
+    name: "fadeInOut",
+    effect: (targets: HtmlTagObject, config: any) => {
+        return gsap.fromTo(targets, { duration: config.duration, opacity: 0 }, { duration: config.duration, opacity: 1 });
+    },
+    defaults: { duration: 2 },
 });
 let mainSwiper = new Swiper(".period-slider__swiper", {
     modules: [Navigation, Pagination, Controller],
@@ -182,15 +195,12 @@ let mainSwiper = new Swiper(".period-slider__swiper", {
         },
         slideChange: function () {
             setEvents();
-            console.log("slideChange1");
+            gsap.effects.fadeInOut(".event-slider", { duration: 1 });
         },
         beforeTransitionStart: function () {
             gsap.effects.fadeOut(".swiper-pagination-bullet__title", { duration: 0 });
-            gsap.effects.fadeOut(".event-slider", { duration: 0.5 });
-            console.log("beforeTransitionStart1");
         },
         slideChangeTransitionEnd: function () {
-            gsap.effects.fadeIn(".event-slider", { duration: 2 });
             gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
             gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
             animateCounter();
@@ -212,16 +222,12 @@ let pagingSwiper = new Swiper(".period-slider__swiper", {
         },
         slideChange: function () {
             rotateBullets();
+            gsap.effects.fadeInOut(".event-slider", { duration: 1 });
         },
         beforeTransitionStart: function () {
             gsap.effects.fadeOut(".swiper-pagination-bullet__title", { duration: 0 });
         },
-        beforeSlideChangeStart: function () {
-            gsap.effects.fadeOut(".event-slider", { duration: 0.5 });
-            console.log("beforeSlideChangeStart2");
-        },
         slideChangeTransitionEnd: function () {
-            gsap.effects.fadeIn(".event-slider", { duration: 2 });
             gsap.effects.fadeIn(".swiper-pagination-bullet-active .swiper-pagination-bullet__title", { duration: 0.4 });
         },
     },
@@ -231,7 +237,7 @@ mainSwiper.controller.control = pagingSwiper;
 pagingSwiper.controller.control = mainSwiper;
 
 let eventSwiper = new Swiper(".event-slider__swiper", {
-    modules: [Navigation, Manipulation],
+    modules: [Navigation, Manipulation, FreeMode],
     direction: "horizontal",
     slidesPerView: 3,
     spaceBetween: 80,
@@ -246,11 +252,16 @@ let eventSwiper = new Swiper(".event-slider__swiper", {
         320: {
             slidesPerView: "auto",
             spaceBetween: 25,
-            loop: true,
+            freeMode: {
+                enabled: true,
+            },
         },
         576: {
             slidesPerView: 2,
             spaceBetween: 25,
+            freeMode: {
+                enabled: false,
+            },
         },
         768: {
             slidesPerView: 3,

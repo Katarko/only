@@ -11,7 +11,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: "Development",
             template: "src/index.html",
-            another: "src/data.ts",
         }),
     ],
     module: {

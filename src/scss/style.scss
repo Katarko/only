@@ -72,6 +72,9 @@ body {
         border-bottom: 1px solid #c7cdd9;
         padding-bottom: 15px;
         margin: 18px 0 20px;
+        @media (min-width: 992px) {
+            display: none;
+        }
     }
     &__swiper {
         min-height: 104px;
@@ -128,10 +131,6 @@ body {
     }
     @media (max-width: 575px) {
         width: 60% !important;
-        &.swiper-slide-next,
-        &.swiper-slide-prev {
-            opacity: 0.4;
-        }
     }
 }
 .period-slider {
@@ -211,6 +210,7 @@ body {
             aspect-ratio: unset;
             border-radius: 0;
             gap: 10px;
+            width: fit-content !important;
         }
 
         .swiper-pagination-bullet {
@@ -303,7 +303,9 @@ body {
         border: 1px solid #42567a80;
         border-radius: 50%;
         cursor: pointer;
-        &_prev {
+        transition: background-color ease 0.2s;
+        &:hover {
+            background-color: white;
         }
         &.swiper-button-disabled {
             opacity: 0.5;
